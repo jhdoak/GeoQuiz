@@ -3,12 +3,26 @@ package com.bignerdranch.android.geoquiz
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 
 class QuizActivity : AppCompatActivity() {
 
     private lateinit var mTrueButton : Button
     private lateinit var mFalseButton : Button
+    private lateinit var mNextButton : Button
+    private lateinit var mQuestionTextView : TextView
+
+    private var mCurrentIndex : Int = 0;
+
+    private var mQuestionBank = arrayOf(
+            Question(R.string.question_australia, true),
+            Question(R.string.question_oceans, true),
+            Question(R.string.question_mideast, false),
+            Question(R.string.question_africa, false),
+            Question(R.string.question_americas, true),
+            Question(R.string.question_asia, true)
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
