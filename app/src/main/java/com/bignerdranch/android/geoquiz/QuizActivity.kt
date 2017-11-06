@@ -13,7 +13,7 @@ class QuizActivity : AppCompatActivity() {
     private lateinit var mNextButton : Button
     private lateinit var mQuestionTextView : TextView
 
-    private var mCurrentIndex : Int = 0;
+    private var mCurrentIndex : Int = 0
 
     private var mQuestionBank = arrayOf(
             Question(R.string.question_australia, true),
@@ -27,6 +27,10 @@ class QuizActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz)
+
+        mQuestionTextView = findViewById(R.id.question_text_view)
+        var question : Int = mQuestionBank[mCurrentIndex].mTextResId
+        mQuestionTextView.text = getString(question)
 
         mTrueButton = findViewById(R.id.true_button)
         mTrueButton.setOnClickListener({
