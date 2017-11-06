@@ -2,6 +2,7 @@ package com.bignerdranch.android.geoquiz
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Gravity
 import android.widget.Button
 import android.widget.Toast
 
@@ -16,16 +17,20 @@ class QuizActivity : AppCompatActivity() {
 
         mTrueButton = findViewById(R.id.true_button)
         mTrueButton.setOnClickListener({
-            Toast.makeText(this@QuizActivity,
+            var toast: Toast = Toast.makeText(this@QuizActivity,
                     R.string.correct_toast,
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT)
+            toast.setGravity(Gravity.TOP, 0, 200)
+            toast.show()
         })
 
         mFalseButton = findViewById(R.id.false_button)
         mFalseButton.setOnClickListener({
-            Toast.makeText(this@QuizActivity,
+            var toast: Toast = Toast.makeText(this@QuizActivity,
                     R.string.incorrect_toast,
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT)
+            toast.setGravity(Gravity.TOP, 0, 200)
+            toast.show()
         })
     }
 
