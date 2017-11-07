@@ -1,19 +1,19 @@
 package com.bignerdranch.android.geoquiz
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 
 class QuizActivity : AppCompatActivity() {
 
-    private lateinit var mTrueButton : Button
-    private lateinit var mFalseButton : Button
-    private lateinit var mNextButton : Button
-    private lateinit var mQuestionTextView : TextView
+    private lateinit var mTrueButton: Button
+    private lateinit var mFalseButton: Button
+    private lateinit var mNextButton: Button
+    private lateinit var mQuestionTextView: TextView
 
-    private var mCurrentIndex : Int = 0
+    private var mCurrentIndex: Int = 0
 
     private var mQuestionBank = arrayOf(
             Question(R.string.question_australia, true),
@@ -33,16 +33,12 @@ class QuizActivity : AppCompatActivity() {
 
         mTrueButton = findViewById(R.id.true_button)
         mTrueButton.setOnClickListener({
-            Toast.makeText(this@QuizActivity,
-                    R.string.correct_toast,
-                    Toast.LENGTH_SHORT).show()
+            checkAnswer(true)
         })
 
         mFalseButton = findViewById(R.id.false_button)
         mFalseButton.setOnClickListener({
-            Toast.makeText(this@QuizActivity,
-                    R.string.incorrect_toast,
-                    Toast.LENGTH_SHORT).show()
+            checkAnswer(false)
         })
 
         mNextButton = findViewById(R.id.next_button)
@@ -53,8 +49,24 @@ class QuizActivity : AppCompatActivity() {
     }
 
     private fun updateQuestion() {
-        var question : Int = mQuestionBank[mCurrentIndex].mTextResId
+        var question: Int = mQuestionBank[mCurrentIndex].mTextResId
         mQuestionTextView.text = getString(question)
+    }
+
+    private fun checkAnswer(userPressedTrue: Boolean) {
+        var answerIsTrue: Boolean = mQuestionBank[mCurrentIndex].mAnswerTrue
+
+        var messageResId: Int =
+                if (userPressedTrue == answerIsTrue) {
+                    R.string.correct_toast
+                } else {
+                    R.string.incorrect_toast
+                }
+
+        Toast.makeText(this@QuizActivity,
+                messageResId,
+                Toast.LENGTH_SHORT).show()
+
     }
 
 }
