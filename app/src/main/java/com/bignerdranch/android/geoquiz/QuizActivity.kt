@@ -29,7 +29,10 @@ class QuizActivity : AppCompatActivity() {
         setContentView(R.layout.activity_quiz)
 
         mQuestionTextView = findViewById(R.id.question_text_view)
-        updateQuestion()
+        mQuestionTextView.setOnClickListener({
+            mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.size
+            updateQuestion()
+        })
 
         mTrueButton = findViewById(R.id.true_button)
         mTrueButton.setOnClickListener({
@@ -46,6 +49,8 @@ class QuizActivity : AppCompatActivity() {
             mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.size
             updateQuestion()
         })
+
+        updateQuestion()
     }
 
     private fun updateQuestion() {
