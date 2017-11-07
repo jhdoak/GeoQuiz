@@ -29,8 +29,7 @@ class QuizActivity : AppCompatActivity() {
         setContentView(R.layout.activity_quiz)
 
         mQuestionTextView = findViewById(R.id.question_text_view)
-        var question : Int = mQuestionBank[mCurrentIndex].mTextResId
-        mQuestionTextView.text = getString(question)
+        updateQuestion()
 
         mTrueButton = findViewById(R.id.true_button)
         mTrueButton.setOnClickListener({
@@ -45,6 +44,17 @@ class QuizActivity : AppCompatActivity() {
                     R.string.incorrect_toast,
                     Toast.LENGTH_SHORT).show()
         })
+
+        mNextButton = findViewById(R.id.next_button)
+        mNextButton.setOnClickListener({
+            mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.size
+            updateQuestion()
+        })
+    }
+
+    private fun updateQuestion() {
+        var question : Int = mQuestionBank[mCurrentIndex].mTextResId
+        mQuestionTextView.text = getString(question)
     }
 
 }
