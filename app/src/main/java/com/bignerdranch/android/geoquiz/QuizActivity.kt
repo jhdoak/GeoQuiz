@@ -3,6 +3,7 @@ package com.bignerdranch.android.geoquiz
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 
@@ -10,8 +11,8 @@ class QuizActivity : AppCompatActivity() {
 
     private lateinit var mTrueButton: Button
     private lateinit var mFalseButton: Button
-    private lateinit var mNextButton: Button
-    private lateinit var mPreviousButton: Button
+    private lateinit var mNextButton: ImageButton
+    private lateinit var mPreviousButton: ImageButton
     private lateinit var mQuestionTextView: TextView
 
     private var mCurrentIndex: Int = 0
