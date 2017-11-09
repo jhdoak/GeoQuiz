@@ -11,6 +11,7 @@ class QuizActivity : AppCompatActivity() {
     private lateinit var mTrueButton: Button
     private lateinit var mFalseButton: Button
     private lateinit var mNextButton: Button
+    private lateinit var mPreviousButton: Button
     private lateinit var mQuestionTextView: TextView
 
     private var mCurrentIndex: Int = 0
@@ -42,6 +43,12 @@ class QuizActivity : AppCompatActivity() {
         mFalseButton = findViewById(R.id.false_button)
         mFalseButton.setOnClickListener({
             checkAnswer(false)
+        })
+
+        mPreviousButton = findViewById(R.id.previous_button)
+        mPreviousButton.setOnClickListener({
+            mCurrentIndex = (mCurrentIndex - 1) % mQuestionBank.size
+            updateQuestion()
         })
 
         mNextButton = findViewById(R.id.next_button)
