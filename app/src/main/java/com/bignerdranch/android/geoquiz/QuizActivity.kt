@@ -1,6 +1,7 @@
 package com.bignerdranch.android.geoquiz
 
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.Button
@@ -10,6 +11,7 @@ import android.widget.Toast
 class QuizActivity : AppCompatActivity() {
 
     private val TAG: String = "QuizActivity"
+    private val KEY_INDEX: String = "index"
 
     private lateinit var mTrueButton: Button
     private lateinit var mFalseButton: Button
@@ -31,6 +33,10 @@ class QuizActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate(Bundle) called")
         setContentView(R.layout.activity_quiz)
+
+        if (savedInstanceState != null) {
+            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX)
+        }
 
         mQuestionTextView = findViewById(R.id.question_text_view)
         updateQuestion()
@@ -65,6 +71,12 @@ class QuizActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         Log.d(TAG, "onPause() called")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        Log.i(TAG, "onSaveInstanceState")
+        outState?.putInt(KEY_INDEX, mCurrentIndex)
     }
 
     override fun onStop() {
