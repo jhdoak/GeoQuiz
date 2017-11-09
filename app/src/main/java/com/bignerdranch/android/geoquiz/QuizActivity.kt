@@ -47,7 +47,12 @@ class QuizActivity : AppCompatActivity() {
 
         mPreviousButton = findViewById(R.id.previous_button)
         mPreviousButton.setOnClickListener({
-            mCurrentIndex = (mCurrentIndex - 1) % mQuestionBank.size
+            mCurrentIndex =
+                    if (mCurrentIndex == 0) {
+                        mQuestionBank.size - 1
+                    } else {
+                        (mCurrentIndex - 1) % mQuestionBank.size
+                    }
             updateQuestion()
         })
 
