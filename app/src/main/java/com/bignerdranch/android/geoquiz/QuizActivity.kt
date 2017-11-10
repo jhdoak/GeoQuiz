@@ -1,7 +1,6 @@
 package com.bignerdranch.android.geoquiz
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.Button
@@ -44,17 +43,22 @@ class QuizActivity : AppCompatActivity() {
         mTrueButton = findViewById(R.id.true_button)
         mTrueButton.setOnClickListener({
             checkAnswer(true)
+            setQuestionAnswered()
+            toggleButtons()
         })
 
         mFalseButton = findViewById(R.id.false_button)
         mFalseButton.setOnClickListener({
             checkAnswer(false)
+            setQuestionAnswered()
+            toggleButtons()
         })
 
         mNextButton = findViewById(R.id.next_button)
         mNextButton.setOnClickListener({
             mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.size
             updateQuestion()
+            toggleButtons()
         })
     }
 
@@ -107,7 +111,20 @@ class QuizActivity : AppCompatActivity() {
         Toast.makeText(this@QuizActivity,
                 messageResId,
                 Toast.LENGTH_SHORT).show()
+    }
 
+    private fun setQuestionAnswered() {
+        mQuestionBank[mCurrentIndex].mHasBeenAnswered = true
+    }
+
+    private fun toggleButtons() {
+        if (mQuestionBank[mCurrentIndex].mHasBeenAnswered == true) {
+            mTrueButton.isEnabled = false
+            mFalseButton.isEnabled = false
+        } else {
+            mTrueButton.isEnabled = true
+            mFalseButton.isEnabled = true
+        }
     }
 
 }
