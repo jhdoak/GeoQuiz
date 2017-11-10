@@ -11,6 +11,7 @@ class QuizActivity : AppCompatActivity() {
 
     private val TAG: String = "QuizActivity"
     private val KEY_INDEX: String = "index"
+    private val KEY_ANSWERED: String = "questionsAnswered"
 
     private lateinit var mTrueButton: Button
     private lateinit var mFalseButton: Button
@@ -35,6 +36,7 @@ class QuizActivity : AppCompatActivity() {
 
         if (savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX)
+            setQuestionsAnsweredState(savedInstanceState.getBooleanArray(KEY_ANSWERED))
         }
 
         mQuestionTextView = findViewById(R.id.question_text_view)
@@ -60,6 +62,8 @@ class QuizActivity : AppCompatActivity() {
             updateQuestion()
             toggleButtons()
         })
+
+        toggleButtons()
     }
 
     override fun onStart() {
@@ -81,6 +85,7 @@ class QuizActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
         Log.i(TAG, "onSaveInstanceState")
         outState?.putInt(KEY_INDEX, mCurrentIndex)
+        outState?.putBooleanArray(KEY_ANSWERED, getQuestionsAnsweredState())
     }
 
     override fun onStop() {
@@ -117,14 +122,23 @@ class QuizActivity : AppCompatActivity() {
         mQuestionBank[mCurrentIndex].mHasBeenAnswered = true
     }
 
-    private fun toggleButtons() {
-        if (mQuestionBank[mCurrentIndex].mHasBeenAnswered == true) {
-            mTrueButton.isEnabled = false
-            mFalseButton.isEnabled = false
-        } else {
-            mTrueButton.isEnabled = true
-            mFalseButton.isEnabled = true
+    private fun getQuestionsAnsweredState(): BooleanArray {
+        var questionsAnsweredState = arrayListOf<Boolean>()
+        mQuestionBank.forEach { question ->
+            questionsAnsweredState.add(question.mHasBeenAnswered)
         }
+        return questionsAnsweredState.toBooleanArray()
+    }
+
+    private fun setQuestionsAnsweredState(answeredState: BooleanArray) {
+        mQuestionBank.forEachIndexed { index, question ->
+            question.mHasBeenAnswered = answeredState[index]
+        }
+    }
+
+    private fun toggleButtons() {
+        mTrueButton.isEnabled = !mQuestionBank[mCurrentIndex].mHasBeenAnswered
+        mFalseButton.isEnabled = !mQuestionBank[mCurrentIndex].mHasBeenAnswered
     }
 
 }
