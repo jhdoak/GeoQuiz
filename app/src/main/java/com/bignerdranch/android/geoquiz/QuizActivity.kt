@@ -19,6 +19,7 @@ class QuizActivity : AppCompatActivity() {
     private lateinit var mQuestionTextView: TextView
 
     private var mCurrentIndex: Int = 0
+    private var mCorrectAnswerCount: Int = 0
 
     private var mQuestionBank = arrayOf(
             Question(R.string.question_australia, true),
@@ -47,6 +48,9 @@ class QuizActivity : AppCompatActivity() {
             checkAnswer(true)
             setQuestionAnswered()
             toggleButtons()
+            if (checkIfAllAnswered()) {
+                displayQuizScore()
+            }
         })
 
         mFalseButton = findViewById(R.id.false_button)
@@ -54,6 +58,9 @@ class QuizActivity : AppCompatActivity() {
             checkAnswer(false)
             setQuestionAnswered()
             toggleButtons()
+            if (checkIfAllAnswered()) {
+                displayQuizScore()
+            }
         })
 
         mNextButton = findViewById(R.id.next_button)
@@ -108,6 +115,7 @@ class QuizActivity : AppCompatActivity() {
 
         var messageResId: Int =
                 if (userPressedTrue == answerIsTrue) {
+                    mCorrectAnswerCount += 1
                     R.string.correct_toast
                 } else {
                     R.string.incorrect_toast
@@ -139,6 +147,28 @@ class QuizActivity : AppCompatActivity() {
     private fun toggleButtons() {
         mTrueButton.isEnabled = !mQuestionBank[mCurrentIndex].mHasBeenAnswered
         mFalseButton.isEnabled = !mQuestionBank[mCurrentIndex].mHasBeenAnswered
+    }
+
+    private fun checkIfAllAnswered(): Boolean {
+        var unansweredQuestions: List<Question> =
+                mQuestionBank.filter { question -> !question.mHasBeenAnswered }
+
+        return unansweredQuestions.isEmpty()
+    }
+
+    private fun displayQuizScore() {
+        Log.d(TAG, "mCorrectAnswerCount: ".plus(mCorrectAnswerCount))
+        Log.d(TAG, "mQuestionBank.size: ".plus(mQuestionBank.size))
+        var quizScore: Float =
+                mCorrectAnswerCount.toFloat() / mQuestionBank.size.toFloat()
+        Log.d(TAG, "quizScore: ".plus(quizScore))
+        var scoreMessage: String = "You scored "
+                .plus(Math.round(quizScore * 100))
+                .plus("% on this quiz!")
+
+        Toast.makeText(this@QuizActivity,
+                scoreMessage,
+                Toast.LENGTH_SHORT).show()
     }
 
 }
