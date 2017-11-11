@@ -1,7 +1,6 @@
 package com.bignerdranch.android.geoquiz
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.Button
@@ -90,14 +89,14 @@ class QuizActivity : AppCompatActivity() {
     }
 
     private fun updateQuestion() {
-        var question: Int = mQuestionBank[mCurrentIndex].mTextResId
+        val question: Int = mQuestionBank[mCurrentIndex].mTextResId
         mQuestionTextView.text = getString(question)
     }
 
     private fun checkAnswer(userPressedTrue: Boolean) {
-        var answerIsTrue: Boolean = mQuestionBank[mCurrentIndex].mAnswerTrue
+        val answerIsTrue: Boolean = mQuestionBank[mCurrentIndex].mAnswerTrue
 
-        var messageResId: Int =
+        val messageResId: Int =
                 if (userPressedTrue == answerIsTrue) {
                     R.string.correct_toast
                 } else {
