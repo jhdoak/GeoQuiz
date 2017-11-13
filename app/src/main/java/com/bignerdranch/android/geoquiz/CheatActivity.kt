@@ -11,8 +11,11 @@ import com.bignerdranch.android.geoquiz.IntentExtraKeyConstants.EXTRA_ANSWER_IS_
 import com.bignerdranch.android.geoquiz.IntentExtraKeyConstants.EXTRA_ANSWER_SHOWN
 
 class CheatActivity : AppCompatActivity() {
+    private val KEY_HAS_CHEATED: String = "cheated"
+    private val KEY_ANSWER: String = "answer"
 
     private var mAnswerIsTrue: Boolean = false
+    private var mHasCheated: Boolean = false
 
     private lateinit var mAnswerTextView: TextView
     private lateinit var mShowAnswerButton: Button
@@ -21,9 +24,15 @@ class CheatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cheat)
 
-        mAnswerIsTrue = intent.getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false)
-
         mAnswerTextView = findViewById(R.id.answer_text_view)
+
+        if (savedInstanceState != null) {
+            mHasCheated = savedInstanceState.getBoolean(KEY_HAS_CHEATED)
+            setAnswerShownResult(mHasCheated)
+            mAnswerTextView.text = savedInstanceState.getCharSequence(KEY_ANSWER)
+        }
+
+        mAnswerIsTrue = intent.getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false)
 
         mShowAnswerButton = findViewById(R.id.show_answer_button)
         mShowAnswerButton.setOnClickListener({
@@ -31,13 +40,20 @@ class CheatActivity : AppCompatActivity() {
                     if (mAnswerIsTrue) R.string.true_button
                     else R.string.false_button
             )
-            setAnswerShownResult(true)
+            mHasCheated = true
+            setAnswerShownResult(mHasCheated)
         })
     }
 
     private fun setAnswerShownResult(isAnswerShown: Boolean) {
         val data = Intent().putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown)
         setResult(Activity.RESULT_OK, data)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putCharSequence(KEY_ANSWER, mAnswerTextView.text)
+        outState?.putBoolean(KEY_HAS_CHEATED, mHasCheated)
     }
 
     companion object {
