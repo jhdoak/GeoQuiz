@@ -1,10 +1,15 @@
 package com.bignerdranch.android.geoquiz
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.view.ViewAnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import com.bignerdranch.android.geoquiz.IntentExtraKeyConstants.EXTRA_ANSWER_IS_TRUE
@@ -32,6 +37,22 @@ class CheatActivity : AppCompatActivity() {
                     else R.string.false_button
             )
             setAnswerShownResult(true)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val cx: Int = mShowAnswerButton.width / 2
+                val cy: Int = mShowAnswerButton.height / 2
+                val radius: Float = mShowAnswerButton.width.toFloat()
+                var anim: Animator = ViewAnimationUtils.createCircularReveal(mShowAnswerButton, cx, cy, radius, 0.toFloat())
+                anim.addListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator?) {
+                        super.onAnimationEnd(animation)
+                        mShowAnswerButton.visibility = View.INVISIBLE
+                    }
+                })
+                anim.start()
+            } else {
+                mShowAnswerButton.visibility = View.INVISIBLE
+            }
         })
     }
 
