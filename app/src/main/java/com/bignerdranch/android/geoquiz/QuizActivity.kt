@@ -1,5 +1,7 @@
 package com.bignerdranch.android.geoquiz
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -11,6 +13,7 @@ class QuizActivity : AppCompatActivity() {
 
     private val TAG: String = "QuizActivity"
     private val KEY_INDEX: String = "index"
+    private val REQUEST_CODE_CHEAT: Int = 0
 
     private lateinit var mTrueButton: Button
     private lateinit var mFalseButton: Button
@@ -19,6 +22,7 @@ class QuizActivity : AppCompatActivity() {
     private lateinit var mQuestionTextView: TextView
 
     private var mCurrentIndex: Int = 0
+    private var mIsCheater: Boolean = false
 
     private var mQuestionBank = arrayOf(
             Question(R.string.question_australia, true),
@@ -61,8 +65,17 @@ class QuizActivity : AppCompatActivity() {
         mCheatButton.setOnClickListener({
             val answerIsTrue: Boolean = mQuestionBank[mCurrentIndex].mAnswerTrue
             val intent = CheatActivity.newIntent(this@QuizActivity, answerIsTrue)
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_CHEAT)
         })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode != Activity.RESULT_OK) return
+
+        if (requestCode == REQUEST_CODE_CHEAT) {
+            if (data == null) return
+            mIsCheater = CheatActivity.wasAnswerShown(data)
+        }
     }
 
     override fun onStart() {
@@ -105,16 +118,16 @@ class QuizActivity : AppCompatActivity() {
         val answerIsTrue: Boolean = mQuestionBank[mCurrentIndex].mAnswerTrue
 
         val messageResId: Int =
-                if (userPressedTrue == answerIsTrue) {
-                    R.string.correct_toast
-                } else {
-                    R.string.incorrect_toast
+                when {
+                    // Checks if user has cheated before checking if their answer is correct
+                    mIsCheater -> R.string.judgment_toast
+                    userPressedTrue == answerIsTrue -> R.string.correct_toast
+                    else -> R.string.incorrect_toast
                 }
 
         Toast.makeText(this@QuizActivity,
                 messageResId,
                 Toast.LENGTH_SHORT).show()
-
     }
 
 }
