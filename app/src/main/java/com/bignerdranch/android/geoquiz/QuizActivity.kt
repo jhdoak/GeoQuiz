@@ -13,6 +13,7 @@ class QuizActivity : AppCompatActivity() {
 
     private val TAG: String = "QuizActivity"
     private val KEY_INDEX: String = "index"
+    private val KEY_IS_CHEATER: String = "cheated"
     private val REQUEST_CODE_CHEAT: Int = 0
 
     private lateinit var mTrueButton: Button
@@ -40,6 +41,7 @@ class QuizActivity : AppCompatActivity() {
 
         if (savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX)
+            mIsCheater = savedInstanceState.getBoolean(KEY_IS_CHEATER)
         }
 
         mQuestionTextView = findViewById(R.id.question_text_view)
@@ -97,6 +99,7 @@ class QuizActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
         Log.i(TAG, "onSaveInstanceState")
         outState?.putInt(KEY_INDEX, mCurrentIndex)
+        outState?.putBoolean(KEY_IS_CHEATER, mIsCheater)
     }
 
     override fun onStop() {
