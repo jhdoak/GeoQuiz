@@ -13,6 +13,7 @@ class QuizActivity : AppCompatActivity() {
 
     private val TAG: String = "QuizActivity"
     private val KEY_INDEX: String = "index"
+    private val KEY_CHEAT_COUNT = "cheatCount"
     private val REQUEST_CODE_CHEAT: Int = 0
 
     private lateinit var mTrueButton: Button
@@ -22,6 +23,7 @@ class QuizActivity : AppCompatActivity() {
     private lateinit var mQuestionTextView: TextView
 
     private var mCurrentIndex: Int = 0
+    private var mCheatCount: Int = 3
     private var mIsCheater: Boolean = false
 
     private var mQuestionBank = arrayOf(
@@ -40,6 +42,7 @@ class QuizActivity : AppCompatActivity() {
 
         if (savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX)
+            mCheatCount = savedInstanceState.getInt(KEY_CHEAT_COUNT)
         }
 
         mQuestionTextView = findViewById(R.id.question_text_view)
@@ -64,7 +67,7 @@ class QuizActivity : AppCompatActivity() {
         mCheatButton = findViewById(R.id.cheat_button)
         mCheatButton.setOnClickListener({
             val answerIsTrue: Boolean = mQuestionBank[mCurrentIndex].mAnswerTrue
-            val intent = CheatActivity.newIntent(this@QuizActivity, answerIsTrue)
+            val intent = CheatActivity.newIntent(this@QuizActivity, answerIsTrue, mCheatCount)
             startActivityForResult(intent, REQUEST_CODE_CHEAT)
         })
     }
@@ -75,6 +78,7 @@ class QuizActivity : AppCompatActivity() {
         if (requestCode == REQUEST_CODE_CHEAT) {
             if (data == null) return
             mIsCheater = CheatActivity.wasAnswerShown(data)
+            mCheatCount = CheatActivity.checkCheatCount(data)
         }
     }
 
@@ -97,6 +101,7 @@ class QuizActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
         Log.i(TAG, "onSaveInstanceState")
         outState?.putInt(KEY_INDEX, mCurrentIndex)
+        outState?.putInt(KEY_CHEAT_COUNT, mCheatCount)
     }
 
     override fun onStop() {
