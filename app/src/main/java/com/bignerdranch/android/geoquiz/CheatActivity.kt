@@ -21,6 +21,7 @@ class CheatActivity : AppCompatActivity() {
 
     private lateinit var mAnswerTextView: TextView
     private lateinit var mShowAnswerButton: Button
+    private lateinit var mApiLevelTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +30,9 @@ class CheatActivity : AppCompatActivity() {
         mAnswerIsTrue = intent.getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false)
 
         mAnswerTextView = findViewById(R.id.answer_text_view)
+
+        mApiLevelTextView = findViewById(R.id.api_level_text_view)
+        mApiLevelTextView.text = ("API Level " + Build.VERSION.SDK_INT)
 
         mShowAnswerButton = findViewById(R.id.show_answer_button)
         mShowAnswerButton.setOnClickListener({
